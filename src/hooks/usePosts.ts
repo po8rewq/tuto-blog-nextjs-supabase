@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Database } from '@/types/database.types';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { Post } from '@/types/Post';
@@ -10,23 +10,26 @@ const useGetPosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const getPosts = async (limit?: number) => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .limit(limit || 50);
-      if (error) throw error;
-      setPosts(data || []);
-    } catch (error) {
-      setPosts([]);
-      console.log(error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
+  const getPosts = useCallback(
+    async (limit?: number) => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .limit(limit || 50);
+        if (error) throw error;
+        setPosts(data || []);
+      } catch (error) {
+        setPosts([]);
+        console.log(error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [supabase]
+  );
 
   const createPost = async (title: string, body: string) => {
     if (!user) throw new Error('User not found');

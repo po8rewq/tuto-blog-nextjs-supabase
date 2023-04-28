@@ -13,7 +13,7 @@ const PostList = () => {
 
   useEffect(() => {
     getPosts();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [getPosts]);
 
   const renderContent = () => {
     if (!posts.length) return <p>No posts yet</p>;

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 type Props = {
   post?: Post;
-  saveForm: (title: string, body: string) => void;
+  saveForm: (title: string, body: string) => Promise<void>;
 };
 const PostEditForm = ({ saveForm, post }: Props) => {
   const [title, setTitle] = useState('');
